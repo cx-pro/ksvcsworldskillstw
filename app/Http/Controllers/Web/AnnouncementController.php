@@ -8,28 +8,25 @@ use App\Models\Announcement;
 
 class AnnouncementController extends Controller
 {
-    private $request_url;
-    public function __construct()
-    {
-        $this->request_url = Request::url();
-    }
 
     public function list()
     {
         return view(
             "web.announcements.list",
             [
-                "request_url" => $this->request_url,
-                "announcements" => Announcement::all()
+                "announcements" => Announcement::where("active", true)->get()
             ]
         );
     }
     public function show(Request $request, $id)
     {
+
+        $announcement = Announcement::findOrFail($id);
+        if (!$announcement->active)
+            return redirect(route("web.announcements.list"), 404);
         return view(
             "web.announcements.show",
             [
-                "request_url" => $this->request_url,
                 "announcement_detail" => Announcement::where("id", $id)->first()
             ]
         );

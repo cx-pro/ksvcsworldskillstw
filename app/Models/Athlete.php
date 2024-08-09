@@ -6,5 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Athlete extends Model
 {
-        public $timestamps = false;
+    public $timestamps = false;
+    protected $fillable = [
+        'name',
+        'description',
+        'avatar',
+        'active'
+    ];
 }

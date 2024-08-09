@@ -1,5 +1,10 @@
+@php
+    $user = auth()->user();
+    $theme = Session::get("theme", "light");
+    $request_url = Request::url();
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="{{$theme}}">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
@@ -7,7 +12,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>首頁｜競賽紀錄網</title>
+    <title>@yield("title")｜競賽紀錄網</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
@@ -15,10 +20,10 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    @stack("styles")
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/smoothness/jquery-ui.css">
     <style>
         /* Hide scrollbar for Chrome, Safari and Opera */
         *::-webkit-scrollbar {
@@ -33,62 +38,56 @@
         }
 
         /* *::-webkit-scrollbar:horizontal {
-        height: .5rem;
-        } */
+                height: .5rem;
+                } */
         *::-webkit-scrollbar:horizontal {
             display: none;
         }
 
         /* Hide scrollbar for IE, Edge and Firefox */
         /* * {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        } */
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                    } */
     </style>
-    @stack("scripts")
+    @stack("styles")
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.min.js"
+        integrity="sha256-Fb0zP4jE3JHqu+IBB9YktLcSjI1Zc6J2b6gTjB0LpoM=" crossorigin="anonymous"></script>
+    @stack("scripts")
+    <script>
+        $(() => {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        })
+    </script>
+    <div class="position-fixed bottom-0 end-0 mb-3 me-3">
+        <form action="{{route("api.set_theme")}}" method="post" id="themeform">
+            @csrf
+            <select id="theme" name="theme" class="form-select shadow-lg text-bg-primary fw-bold">
+                <option value="light" @selected($theme == "light")>亮色</option>
+                <option value="dark" @selected($theme == "dark")>暗色</option>
+            </select>
+        </form>
+    </div>
+    <script>
+        $(() => {
+            $("#theme").change(() => {
+                $("#themeform").submit();
+            })
+        })
+    </script>
 
-
-    <header
-        class="d-flex shadow-sm flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-        <div class="col-md-3 mb-2 mb-md-0 text-center">
-            <a href="{{route('home')}}" class="d-inline-flex link-body-emphasis text-decoration-none">
-                <span class="wt064 fs-1" style="color:#C9AD8B">競賽紀錄</span>
-            </a>
-        </div>
-
-        <ul class="nav col-12 col-md-auto mb-2 wt064 fs-4 justify-content-center mb-md-0 text-center">
-            <li>
-                <a href="{{route('home')}}"
-                    class="nav-link px-2 @if ($request_url == route('home')) link-secondary @endif">首頁</a>
-            </li>
-            <li>
-                <a href="{{route('announcements.list')}}"
-                    class="nav-link px-2 @if ($request_url == route('announcements.list')) link-secondary @endif">公告</a>
-            </li>
-            <li>
-                <a href="{{route('athletes.list')}}"
-                    class="nav-link px-2 @if ($request_url == route('athletes.list')) link-secondary @endif">歷屆選手</a>
-            </li>
-            <li>
-                <a href="{{route('collections.list')}}"
-                    class="nav-link px-2 @if ($request_url == route('collections.list')) link-secondary @endif">練習作品</a>
-            </li>
-        </ul>
-
-        <div class="col-md-3 text-center">
-            <a href="{{route('login')}}" class="btn fs-3 border-0">
-                <i class="bi bi-box-arrow-in-right me-2"></i><span class="wt064">登入</span>
-            </a>
-        </div>
-    </header>
+    @include("layouts.includes.header")
 
     <div class="container">
         @yield('content')
     </div>
-    @yield('footer')
+
+    @include("layouts.includes.footer")
+
 </body>
 
 </html>

@@ -19,7 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'email',
+        'email_verified_at',
         'password',
+        'role_id',
+        'active'
     ];
 
     /**
@@ -43,5 +47,42 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function role()
+    {
+        return Role::findOrFail($this->role_id);
+    }
+    public function permission()
+    {
+        return $this->role()->permission();
+    }
+    public function level()
+    {
+        return $this->role()->permission_level();
+    }
+    public function isAdmin()
+    {
+        return $this->permission()->is_admin();
+    }
+    public function controllable_users()
+    {
+        return User::whereIn("role_id", auth()->user()->permission()->controllable_roles()->pluck("id"));
+    }
+    public function role_accessible($role_id)
+    {
+        return $this->level() <= Role::findOrFail($role_id)->permission_level();
+    }
+    public function permission_accessible($permission_id)
+    {
+        return $this->level() <= Permission::findOrFail($permission_id)->level;
+    }
+    public function level_accessible($level)
+    {
+        return $this->level() <= $level;
+    }
+    public function level_smaller($level)
+    {
+        return $this->level() < $level;
     }
 }
