@@ -4,6 +4,18 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `announcement_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `announcement_categories` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `color` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `announcement_categories_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `announcements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -70,24 +82,24 @@ DROP TABLE IF EXISTS `collections`;
 CREATE TABLE `collections` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `grade` varchar(255) NULL,
+  `grade` varchar(255) DEFAULT NULL,
   `quiz` varchar(255) NOT NULL,
   `file` varchar(255) NOT NULL,
   `sql` varchar(255) NOT NULL,
   `project_name` varchar(255) NOT NULL,
-  `location` varchar(255) NULL,
-  `path` varchar(255) NULL,
-  `public_path` varchar(255) NULL,
-  `db_name` varchar(255) NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `public_path` varchar(255) DEFAULT NULL,
+  `db_name` varchar(255) DEFAULT NULL,
   `author_id` bigint(20) unsigned NOT NULL,
-  `athlete_id` bigint(20) unsigned NULL,
+  `athlete_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
   UNIQUE KEY `collections_project_name_unique` (`project_name`),
   UNIQUE KEY `collections_location_unique` (`location`),
   UNIQUE KEY `collections_path_unique` (`path`),
-  UNIQUE KEY `collections_db_name_unique` (`db_name`),
-  PRIMARY KEY (`id`)
+  UNIQUE KEY `collections_db_name_unique` (`db_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
@@ -201,3 +213,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (6,'2024_08_06_0800
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (7,'2024_08_06_095006_create_personal_access_tokens_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (8,'2024_08_07_053628_create_roles_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2024_08_07_054302_create_permisssions_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2024_08_16_011818_create_announcement_categories_table',2);
