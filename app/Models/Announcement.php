@@ -15,8 +15,14 @@ class Announcement extends Model
     protected $fillable = [
         'title',
         'content',
+        'category_id',
         'author_id',
         'active'
     ];
+
+    public function category()
+    {
+        return AnnouncementCategory::findOrFail($this->category_id);
+    }
 
 }

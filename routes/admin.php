@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AnnouncementCategoryController;
 use App\Http\Controllers\Admin\HardDeleteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminRequired;
@@ -37,11 +38,20 @@ Route::middleware(AdminRequired::class)->prefix("admin")->group(function () {
     Route::post("/permissions/update_levels", [PermissionController::class, "update_levels"])->name("admin.permissions.update_levels");
     Route::get("/permissions/{id}/destory", [PermissionController::class, "destory"])->name("admin.permissions.destory");
 
+
     Route::get("/announcements/create", [AnnouncementController::class, "create"])->name("admin.announcements.create");
     Route::post("/announcements/store", [AnnouncementController::class, "store"])->name("admin.announcements.store");
     Route::get("/announcements/{id}/edit", [AnnouncementController::class, "edit"])->name("admin.announcements.edit");
     Route::post("/announcements/{id}/update", [AnnouncementController::class, "update"])->name("admin.announcements.update");
     Route::get("/announcements/{id}/destory", [AnnouncementController::class, "destory"])->name("admin.announcements.destory");
+
+
+    Route::get("/announcements_categorie/list", [AnnouncementCategoryController::class, "list"])->name("admin.announcement_categories.list");
+    Route::get("/announcements_categorie/create", [AnnouncementCategoryController::class, "create"])->name("admin.announcement_categories.create");
+    Route::post("/announcement_categories/store", [AnnouncementCategoryController::class, "store"])->name("admin.announcement_categories.store");
+    Route::get("/announcement_categories/{id}/edit", [AnnouncementCategoryController::class, "edit"])->name("admin.announcement_categories.edit");
+    Route::post("/announcement_categories/{id}/update", [AnnouncementCategoryController::class, "update"])->name("admin.announcement_categories.update");
+    Route::get("/announcement_categories/{id}/destory", [AnnouncementCategoryController::class, "destory"])->name("admin.announcement_categories.destory");
 
 
     Route::get("/athletes/create", [AthleteController::class, "create"])->name("admin.athletes.create");

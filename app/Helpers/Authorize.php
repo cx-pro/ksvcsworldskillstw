@@ -18,7 +18,7 @@ class Authorize
     }
     static function USER()
     {
-        Gate::allowIf(fn(User $user) => $user->isAdmin(), "存取遭拒");
+        Gate::allowIf(fn(User $user) => $user->isUser(), "存取遭拒");
     }
     static function CHECK(string $permission_name)
     {

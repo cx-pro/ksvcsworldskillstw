@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\LoginRequired;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\WebController;
 use App\Http\Controllers\Auth\AuthController;
@@ -24,6 +25,14 @@ Route::get("/announcements/{id}", [AnnouncementController::class, "show"])->name
 
 
 Route::get("/athletes", [AthleteController::class, "list"])->name("athletes.list");
+Route::get("/athletes/{id}", [AthleteController::class, "show"])->name("athletes.show");
 
 
-Route::get("/collections", [CollectionController::class, "list"])->name("collections.list");
+Route::middleware(LoginRequired::class)->get("/collections", [CollectionController::class, "list"])->name("collections.list");
+
+Route::middleware(LoginRequired::class)->get("/fs", function (Request $request) {
+    $file = $request::get("file", "null");
+    if (!Storage::exists($file))
+        return response()->noContent(404);
+    return Storage::download($file);
+});

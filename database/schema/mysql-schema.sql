@@ -11,6 +11,7 @@ CREATE TABLE `announcements` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `content` mediumtext NOT NULL,
+  `category_id` bigint(20) unsigned NOT NULL,
   `author_id` bigint(20) unsigned NOT NULL,
   `active` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -35,6 +36,8 @@ DROP TABLE IF EXISTS `athletes`;
 CREATE TABLE `athletes` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `cls` varchar(255) NOT NULL,
+  `grade` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `avatar` varchar(255) NOT NULL,
   `active` tinyint(1) NOT NULL,
@@ -67,10 +70,23 @@ DROP TABLE IF EXISTS `collections`;
 CREATE TABLE `collections` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `grade` varchar(255) NULL,
+  `quiz` varchar(255) NOT NULL,
+  `file` varchar(255) NOT NULL,
+  `sql` varchar(255) NOT NULL,
+  `project_name` varchar(255) NOT NULL,
+  `location` varchar(255) NULL,
+  `path` varchar(255) NULL,
+  `public_path` varchar(255) NULL,
+  `db_name` varchar(255) NULL,
   `author_id` bigint(20) unsigned NOT NULL,
+  `athlete_id` bigint(20) unsigned NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  UNIQUE KEY `collections_project_name_unique` (`project_name`),
+  UNIQUE KEY `collections_location_unique` (`location`),
+  UNIQUE KEY `collections_path_unique` (`path`),
+  UNIQUE KEY `collections_db_name_unique` (`db_name`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

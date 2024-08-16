@@ -10,14 +10,8 @@
     </a>
 @endif
 <hr>
-
-<div class="row">
-    @foreach ($collections as $collection)
-        @php
-            $delete_url = route("admin.collections.destory", ["id" => $collection->id]);
-            $delete_id = "colldel" . $collection->id;
-        @endphp
-        @include("web.includes.remove_confirm")
-        @include("web.collections.includes.index_card")
-    @endforeach
+<div>
+    存取以下作品中屬Laravel者將登出此站。
 </div>
+
+@include("web.collections.includes.list_row")

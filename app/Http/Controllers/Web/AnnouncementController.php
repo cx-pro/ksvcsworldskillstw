@@ -27,7 +27,7 @@ class AnnouncementController extends Controller
         return view(
             "web.announcements.show",
             [
-                "announcement_detail" => Announcement::where("id", $id)->first()
+                "announcement" => Announcement::where("id", $id)->first()
             ]
         );
     }

@@ -17,15 +17,18 @@ class AnnouncementController extends Controller
         $user = auth()->user();
         $request->validate([
             'title' => ['required', "max:255"],
+            'category' => ['required'],
             'content' => ['required'],
         ], [
             "title.required" => "標題不可為空",
+            "category.required" => "必須選擇類別",
             "content.required" => "內容不可為空",
             "title.max" => "標題不可超過255字",
         ]);
         $announcement = Announcement::create([
             "title" => $request->title,
             "content" => $request->content,
+            "category_id" => $request->category,
             "author_id" => $user->id,
             "active" => true,
         ]);
@@ -47,15 +50,18 @@ class AnnouncementController extends Controller
         $announcement = Announcement::findOrFail($id);
         $request->validate([
             'title' => ['required', "max:255"],
+            'category' => ['required'],
             'content' => ['required'],
         ], [
             "title.required" => "標題不可為空",
+            "category.required" => "必須選擇類別",
             "content.required" => "內容不可為空",
             "title.max" => "標題不可超過255字",
         ]);
         $announcement->update([
             "title" => $request->title,
-            "content" => $request->content
+            "content" => $request->content,
+            "category_id" => $request->category,
         ]);
 
         return redirect(route("announcements.show", ["id" => $id]));

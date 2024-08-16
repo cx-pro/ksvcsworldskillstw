@@ -20,10 +20,12 @@
                 <a href="{{route('athletes.list')}}"
                     class="nav-link px-2 @if ($request_url == route('athletes.list')) link-secondary @endif">歷屆選手</a>
             </li>
-            <li>
-                <a href="{{route('collections.list')}}"
-                    class="nav-link px-2 @if ($request_url == route('collections.list')) link-secondary @endif">練習作品</a>
-            </li>
+            @if(!empty($user) && $user->isUser())
+                <li>
+                    <a href="{{route('collections.list')}}"
+                        class="nav-link px-2 @if ($request_url == route('collections.list')) link-secondary @endif">練習作品</a>
+                </li>
+            @endif
         </ul>
         <div class="col-md-3 text-center">
             @if ($user)

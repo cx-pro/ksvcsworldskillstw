@@ -10,12 +10,30 @@
     </a>
 @endif
 <hr>
-@foreach ($athletes as $athlete)
-    @php
-        $delete_url = route("admin.athletes.destory", ["id" => $athlete->id]);
-        $delete_id = "athdel" . $athlete->id;
-    @endphp
+<div class="mb-5">
+    @foreach ($athletes as $athlete)
+        @if(!isset($last_grade))
+            <div class="wt064 fs-4 w-100 mt-5">{{$athlete->grade}}</div>
+            <div class="d-flex overflow-x-scroll">
+        @else
+                @if ($last_grade != $athlete->grade)
+                    </div>
+                    <div class="wt064 fs-4 w-100 mt-5">{{$athlete->grade}}</div>
+                    <div class="d-flex overflow-x-scroll">
+                @endif
+        @endif
 
-    @include("web.includes.remove_confirm")
-    @include("web.athletes.includes.card")
-@endforeach
+            @php
+                $last_grade = $athlete->grade;
+                $delete_url = route("admin.athletes.destory", ["id" => $athlete->id]);
+                $delete_id = "athdel" . $athlete->id;
+            @endphp
+
+            @include("web.includes.remove_confirm")
+            @include("web.athletes.includes.card")
+
+            @if($loop->last)
+                </div>
+            @endif
+    @endforeach
+</div>

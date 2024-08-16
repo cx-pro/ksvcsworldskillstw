@@ -1,4 +1,4 @@
-<div class="mt-5" id="athlete{{$athlete->id}}">
+<div class="col-12 col-sm-6 col-md-4 me-3 mb-3" id="athlete{{$athlete->id}}">
     @if ($user && $user->isAdmin())
         <div class="d-flex justify-content-end mb-1">
             <div class="me-5 fs-5 border rounded-3 shadow-sm px-3">
@@ -13,31 +13,23 @@
             </div>
         </div>
     @endif
-    <div class="border rounded rounded-5 shadow-sm py-3 px-4 bg-light-subtle">
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-4">
+    <a href="{{route("athletes.show", ["id" => $athlete->id])}}" class="text-decoration-none" style="color:unset;">
+        <div class="border rounded rounded-5 shadow-sm py-3 px-4 bg-light-subtle">
+            <div class="">
                 <img src="{{$athlete->avatar}}" class="rounded-4 w-100">
             </div>
-            <div class="col-12 col-sm-6 col-md-4 text-break">
-                <div class="wt064 fs-3">{{$athlete->name}}</div>
-                <div class="fs-5 text-break overflow-scroll" style="max-height:23vw;">
-                    {{$athlete->description}}
+            <div class="row wt064">
+                <div class="col-6 col-sm-12 col-md-12 col-md-12 col-xl-6 fs-2 text-center">
+                    {{$athlete->cls}}
+                </div>
+                <div class="col-6 col-sm-12 col-md-12 col-md-12 col-xl-6 fs-2 text-center">
+                    {{$athlete->name}}
                 </div>
             </div>
-            <div class="col-12 col-md-4 text-break d-flex">
-                <div class="vr me-3 d-none d-md-block"></div>
-                <div class="flex-grow-1">
-                    <div class="wt064 fs-3">競賽經歷</div>
-                    <div class="fs-5 overflow-scroll" style="max-height:23vw;">
-                        @foreach(App\Models\AthleteExperience::where("athlete_id", $athlete->id)->get() as $athlete_experience)
-                            <div class="d-flex w-100 align-items-center border-bottom mb-2">
-                                <div class="flex-grow-1">{{$athlete_experience->name}}</div>
-                                <div class="">{{$athlete_experience->rank}}</div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
+            <div class="text-primary fw-bold text-center fs-5">
+                <hr>
+                查看
             </div>
         </div>
-    </div>
+    </a>
 </div>

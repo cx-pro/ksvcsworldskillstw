@@ -35,8 +35,34 @@
             @enderror
         </div>
         <div class="mt-3">
+            <label for="cls" class="fw-bold user-select-none">班級</label>
+            <input type="text" name="cls" id="cls"
+                class="form-control bg-light-subtle @error('cls') is-invalid @enderror" required maxlength="255"
+                value="{{old("cls", empty($athlete) ? "" : $athlete->cls)}}">
+
+            @error('cls')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="mt-3">
+            <label for="grade" class="fw-bold user-select-none">屆數</label>
+            <input type="text" name="grade" id="grade"
+                class="form-control bg-light-subtle @error('grade') is-invalid @enderror" required maxlength="255"
+                value="{{old("grade", empty($athlete) ? "" : $athlete->grade)}}">
+            @error('grade')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="mt-3">
             <label for="avatar" class="fw-bold user-select-none">頭像</label>
-            <input type="file" name="avatar" id="avatar" class="form-control @error('avatar') is-invalid @enderror">
+            <input type="file" accept="image/*" name="avatar" id="avatar"
+                class="form-control @error('avatar') is-invalid @enderror">
 
             @error('avatar')
                 <div class="invalid-feedback">
@@ -46,6 +72,26 @@
             <div class="w-50 w-md-25 mt-2">
                 @if (!empty($athlete))<img src="{{$athlete->avatar}}" class="w-100">@endif
             </div>
+        </div>
+        <div class="mt-3">
+            <div class="mb-2 d-flex align-items-center">
+                <label for="collection" class="fw-bold user-select-none me-2">作品</label>
+                <button type="button" id="clear_select" class="btn btn-sm btn-secondary fw-bold">取消選擇</button>
+            </div>
+
+            <select name="collection[]" id="collection" multiple
+                class="form-select @error('collection') is-invalid @enderror">
+                @foreach ((empty($athlete) ? App\Models\Collection::whereNull("athlete_id") : App\Models\Collection::where("athlete_id", $athlete->id)->orWhereNull("athlete_id"))->get() as $collection)
+                    <option class="collections_option" value="{{$collection->id}}" @selected(!empty($athlete) ? $collection->athlete_id == $athlete->id : old("collection"))>
+                        {{$collection->name}}
+                    </option>
+                @endforeach
+            </select>
+            @error('collection')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
         <div class="mt-3 row">
             <hr>
@@ -154,6 +200,9 @@
                 var rest = experience_list.splice(start + 1, experience_list.length - start);
                 experience_list = [].concat(experience_list, selected, rest)
                 showExpList();
+            })
+            $("#clear_select").click(() => {
+                $(".collections_option:selected").prop("selected", false);
             })
         })
     </script>

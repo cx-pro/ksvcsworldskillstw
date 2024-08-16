@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AnnouncementCategory;
 use App\Models\AthleteExperience;
 use App\Models\Collection;
 use App\Models\permission;
@@ -11,6 +12,7 @@ use App\Models\Athlete;
 use App\Models\Announcement;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
@@ -36,8 +38,10 @@ class DatabaseSeeder extends Seeder
 
         Athlete::create([
             "name" => "測試選手",
+            "cls" => "x年xx班",
+            "grade" => "第53屆",
             "description" => "測試描述",
-            "avatar" => asset("public/examples/athletes/example.jpg"),
+            "avatar" => "/public/examples/athletes/example.jpg",
             "active" => true,
         ]);
 
@@ -49,21 +53,17 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        AnnouncementCategory::create([
+            "name" => "測試",
+            "color" => "#198754",
+            "active" => true,
+        ]);
         Announcement::create([
             "title" => "測試標題",
             "content" => "測試內文",
+            "category_id" => "1",
             "author_id" => 2,
             "active" => true,
-        ]);
-        Collection::create([
-            "name" => "測試作品1",
-            "path" => asset("public/examples/測試作品.html"),
-            "author_id" => 2,
-        ]);
-        Collection::create([
-            "name" => "測試作品2",
-            "path" => asset("public/examples/測試作品.zip"),
-            "author_id" => 2,
         ]);
         Role::create([
             "name" => "admin",
@@ -78,13 +78,21 @@ class DatabaseSeeder extends Seeder
             "level" => 0
         ]);
         permission::create([
-            "name" => "user",
+            "name" => "_user",
             "level" => 1
         ]);
 
-        foreach (['imgs/athletes','files', 'files/collections'] as $dir) {
+        foreach (['imgs/athletes', 'files', 'files/collections', "sub/"] as $dir) {
             File::deleteDirectory(public_path($dir));
             File::makeDirectory(public_path($dir));
+        }
+        File::deleteDirectory(storage_path("app/public/sub/"));
+        File::makeDirectory(storage_path("app/public/sub/"));
+
+        foreach (DB::select('SHOW DATABASES') as $key => $db) {
+            $db_name = $db->Database;
+            if (str_starts_with($db_name, "kwst_"))
+                DB::statement("DROP DATABASE $db_name");
         }
     }
 }

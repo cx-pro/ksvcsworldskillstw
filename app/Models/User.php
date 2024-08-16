@@ -65,6 +65,10 @@ class User extends Authenticatable
     {
         return $this->permission()->is_admin();
     }
+    public function isUser()
+    {
+        return $this->permission()->is_user();
+    }
     public function controllable_users()
     {
         return User::whereIn("role_id", auth()->user()->permission()->controllable_roles()->pluck("id"));

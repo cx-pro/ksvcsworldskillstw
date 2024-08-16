@@ -37,12 +37,13 @@
             background-color: #4285F4;
         }
 
-        /* *::-webkit-scrollbar:horizontal {
-                height: .5rem;
-                } */
         *::-webkit-scrollbar:horizontal {
-            display: none;
+            height: .5rem;
         }
+
+        /* *::-webkit-scrollbar:horizontal {
+            display: none;
+        } */
 
         /* Hide scrollbar for IE, Edge and Firefox */
         /* * {
@@ -63,31 +64,17 @@
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         })
     </script>
-    <div class="position-fixed bottom-0 end-0 mb-3 me-3">
-        <form action="{{route("api.set_theme")}}" method="post" id="themeform">
-            @csrf
-            <select id="theme" name="theme" class="form-select shadow-lg text-bg-primary fw-bold">
-                <option value="light" @selected($theme == "light")>亮色</option>
-                <option value="dark" @selected($theme == "dark")>暗色</option>
-            </select>
-        </form>
+    <div class="d-flex flex-column min-vh-100">
+
+        @include("layouts.includes.header")
+
+        <div class="container">
+            @yield('content')
+        </div>
+
+        @include("layouts.includes.footer")
+
     </div>
-    <script>
-        $(() => {
-            $("#theme").change(() => {
-                $("#themeform").submit();
-            })
-        })
-    </script>
-
-    @include("layouts.includes.header")
-
-    <div class="container">
-        @yield('content')
-    </div>
-
-    @include("layouts.includes.footer")
-
 </body>
 
 </html>

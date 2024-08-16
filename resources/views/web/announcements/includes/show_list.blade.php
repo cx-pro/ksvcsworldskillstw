@@ -5,9 +5,14 @@
     <span class="mx-3 wt064">公告</span>
 </span>
 @if ($user && $user->isAdmin())
-    <a href="{{route("admin.announcements.create")}}" class="float-end fs-2 me-5">
-        <i class="bi bi-plus-lg" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="新增"></i>
-    </a>
+    <div class="float-end">
+        <a href="{{route("admin.announcements.create")}}" class="fs-2 me-3 text-decoration-none">
+            <i class="bi bi-plus-lg" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="新增"></i>
+        </a>
+        <a href="{{route("admin.announcement_categories.list")}}" class="fs-2 me-3 text-decoration-none">
+            <i class="bi bi-tag" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="管理類別"></i>
+        </a>
+    </div>
 @endif
 <hr>
 <div class="my-3" style="min-height:30vh;">
@@ -23,6 +28,10 @@
                 <a href="{{route('announcements.show', [$announcement->id])}}"
                     class="text-decoration-none link-primary fw-bold flex-grow-1 me-3">
                     <div class="d-flex align-items-center">
+                        <div class="me-2 d-flex align-items-center">
+                            <span class="badge"
+                                style="background-color:{{$announcement->category()->color}}">{{$announcement->category()->name}}</span>
+                        </div>
                         <div class="flex-grow-1">{{$announcement->title}}</div>
                         <div class="text-end">
                             {{substr($announcement->created_at, 0, -3)}}
